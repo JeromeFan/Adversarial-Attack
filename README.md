@@ -6,22 +6,26 @@
 
 ### 2022.1.18
 
-初步搭好项目框架，并在超参数固定情况下实现FGSM和I-FGSM算法，部分代码学习参考自pytorch tutorial和台大李宏毅2021年春季课程HW10。
+初步搭好项目框架（代码目前基本无检错能力，请严格按照下述提示操作），并在超参数固定情况下实现FGSM和I-FGSM算法，部分代码学习参考自pytorch tutorial和台大李宏毅2021年春季课程HW10。
 
 > https://pytorch.org/tutorials/beginner/fgsm_tutorial.html
+> 
 > https://github.com/ga642381/ML2021-Spring
 
 支持使用cifar-10测试集数据共10000张作为待攻击数据，支持使用pytorchcv中提供的预训练resnet-20和resnet-110。
 
 $batch\ size=64$，loss function: `nn.CrossEntropyLoss()`。
-FGSM：指定$\varepsilon=8$。
 
-I-FGSM：指定迭代次数为$n=20$次，$\varepsilon=8$，单次步长$\alpha=0.8$。
+FGSM：指定$\varepsilon=8$。在resnet-20网络中有3401张攻击失败（对抗样本分类标签与原始标签相同）。
+
+I-FGSM：指定迭代次数为$n=20$次，$\varepsilon=8$，单次步长$\alpha=0.8$。在resnet-20网络中全部攻击成功（对抗样本分类标签与原始标签相同）。
 
 ## USAGE
 
+命令行调用。
+
 ```python
-> python run_attack.py <options>
+python run_attack.py <options>
 ```
 
 可选参数有：`-a`、`-d`、`-m`，分别用以指定攻击算法、数据集、模型。
@@ -29,8 +33,10 @@ I-FGSM：指定迭代次数为$n=20$次，$\varepsilon=8$，单次步长$\alpha=
 目前支持的攻击算法有FGSM、I-FGSM，数据集为cifar-10，模型有预训练的resnet-20和resnet-110。默认参数是FGSM、cifar-10、resnet-20。
 
 ```python
-> python run_attack.py -a IFGSM -d cifar10 -m resnet110
+python run_attack.py -a IFGSM -d cifar10 -m resnet110
 ```
+
+代码正常执行后，在output文件夹中会产生名如：FGSM-cifar10-resnet20 的文件夹，内部共10000张图片，命名规则为 index-原图标签-攻击后标签
 
 ## FGSM
 
