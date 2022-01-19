@@ -14,16 +14,17 @@ from model import setupModel
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def runAttack(algorithm, dataloader, mean, std, model, loss_fn, epsilon):
+def runAttack(algorithm, dataloader, mean, std, model, loss_fn):
     model.eval()
     acc_counter = 0
     adv_examples = []
+    attack = algorithm(model, loss_fn, std)
 
     # 循环测试集中的所有样本
     for data, target in dataloader:
         data, target = data.to(device), target.to(device)
 
-        perturbed_data = algorithm(model, data, target, loss_fn, epsilon, std)
+        perturbed_data = attack.perturb(data, target)
         model.zero_grad()
         perturbed_output = model(perturbed_data)
         perturbed_pred = perturbed_output.argmax(dim=1)
@@ -47,10 +48,10 @@ def runAttack(algorithm, dataloader, mean, std, model, loss_fn, epsilon):
 
 def setupAttack(chosenAlgorithm, chosenDataset, chosenModel):
 
-    algorithm, epsilon = setupAlgorithm(chosenAlgorithm)
+    algorithm = setupAlgorithm(chosenAlgorithm)
     dataloader, classes, mean, std = setupDataset(chosenDataset)
     model = setupModel(chosenModel)
-    return algorithm, dataloader, classes, model, mean, std, epsilon
+    return algorithm, dataloader, classes, model, mean, std
 
 
 def saveAdvExamples(adv_examples, classes, chosenAlgorithm, chosenDataset, chosenModel):
@@ -73,8 +74,8 @@ def readCommand(argv):
     USAGE:      python run_attack.py <options>
     EXAMPLES:   (1) python run_attack.py
                       - 以默认参数开始攻击（使用FGSM在cifar-10数据集上对预训练的resnet-20网络进行攻击）
-                (2) python run_attack.py -a IFGSM -d cifar10 -m resnet110
-                      - 使用I-FGSM在cifar-10数据集上对预训练的resnet110网络进行攻击
+                (2) python run_attack.py -a PGD -d cifar10 -m resnet110
+                      - 使用PGD在cifar-10数据集上对预训练的resnet110网络进行攻击
     """
     parser = OptionParser(usageStr)
 
@@ -98,9 +99,9 @@ if __name__ == '__main__':
 
     # options 为一个dict字典
     options = readCommand(sys.argv[1:])
-    algorithm, dataloader, classes, model, mean, std, epsilon = setupAttack(**options)
+    algorithm, dataloader, classes, model, mean, std = setupAttack(**options)
 
     model = model.to(device)
     loss_fn = nn.CrossEntropyLoss()
-    adv_examples = runAttack(algorithm, dataloader, mean, std, model, loss_fn, epsilon)
+    adv_examples = runAttack(algorithm, dataloader, mean, std, model, loss_fn)
     saveAdvExamples(adv_examples, classes, **options)
