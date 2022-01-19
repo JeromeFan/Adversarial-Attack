@@ -25,5 +25,5 @@ def setupDataset(chosenDataset):
     else:
         raise Exception("其他数据集暂不支持! 请使用README中所述的已支持数据集！")
 
-    val_dataloader = torch.utils.data.DataLoader(val_data, batch_size=batch_size)
+    val_dataloader = torch.utils.data.DataLoader(val_data, batch_size=batch_size, drop_last=True)
     return val_dataloader, classes, mean, std

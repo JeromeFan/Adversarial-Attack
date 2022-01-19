@@ -45,3 +45,15 @@ $$x_0^{'}=x$$
 $$x_{t+1}^{'}={Clip}_x^{\varepsilon}(x_t^{'}+{\alpha}{\cdot}sgn({\triangledown}_xL(x,y;{\theta})))$$
 
 其中迭代次数为$T=\min({\varepsilon}+4,1.25{\times}{\varepsilon})$，${\alpha}={\varepsilon}/T$，${Clip}_x^{\varepsilon}$指对抗样本应位于benign image的${\varepsilon}-ball$内部。
+
+## MI-FGSM
+
+> Paper link (Dong et al. 2018): https://arxiv.org/pdf/1710.06081.pdf
+
+$$x_0^{'}=x$$
+
+$$g_{t+1}={\miu}{\cdot}g_t+\frac{{\triangledown}_xL(x,y;{\theta}))}{{||{\triangledown}_xL(x,y;{\theta}))||}_1}$$
+
+$$x_{t+1}^{'}={Clip}_x^{\varepsilon}(x_t^{'}+{\alpha}{\cdot}sgn(g_{t+1})$$
+
+其中，${\miu}$为衰减因子，论文中选取值为1.0，若为0则MI-FGSM等价于PGD方法。
