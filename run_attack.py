@@ -41,7 +41,8 @@ def runAttack(algorithm, dataloader, mean, std, model, loss_fn):
             adv_examples.append((target[i], perturbed_pred[i], adv_ex[i]))
 
     final_acc = acc_counter / float(len(dataloader.dataset))
-    print('Accuracy = {} / {} = {}'.format(acc_counter, len(dataloader.dataset), final_acc))
+    print('Accuracy = {} / {} = {}(可能因为将最后一个不满的batch丢弃导致实际总数与显示不同)'
+          .format(acc_counter, len(dataloader.dataset), final_acc))
 
     return adv_examples
 

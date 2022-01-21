@@ -1,5 +1,17 @@
 # 更新log
 
+## 2022.1.21
+
+part 1：
+
+加入了正则norm的选项，FGSM为$L_{\infty}$，FGM为$L_2$，PGD中迭代的为$L_{\infty}$的FGSM，MI-FGSM中有$L_{\infty}$和$L_2$两版。
+
+part 2：
+
+修改代码中范数的计算部分，`torch.norm`计算出的是一个值，因此上一版代码中，在MI-FGSM算法中的动量计算上，相当于在整个batch中去求了1范数，即将$64{\times}3{\times}32{\times}32$中求了所有值的绝对值之和，修改后在$shape[0]$即batch维度循环，从而计算出的norm值shape为$64{\times}1$。
+
+todo: 由于加入了范数部分，导致输出时候的文件夹的命名存在重复命名导致出错无法保存图片的问题，下次修复。
+
 ## 2022.1.19
 
 part 1：

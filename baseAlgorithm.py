@@ -9,11 +9,17 @@ class BaseAlgorithm:
         self.loss_fn = loss_fn
         self.std = std
 
-    def fgsm(self, data, target, epsilon):
+    def fgsm(self, data, target, epsilon, normType):
 
         x_adv = data.detach().clone()
         x_adv.requires_grad = True
-        loss = self.loss_fn(self.model(x_adv), target)
-        loss.backward()
-        x_adv = x_adv + epsilon * x_adv.grad.detach().sign()
+        grad = torch.autograd.grad(outputs=self.loss_fn(self.model(x_adv), target), inputs=x_adv)[0]
+        if normType == 'inf':
+            grad = grad.sign()
+        elif normType == '2':
+            for i in range(grad.shape[0]):
+                norm_2 = torch.norm(grad[i], p=2)
+                grad[i] = grad[i] / norm_2
+
+        x_adv = x_adv + epsilon * grad
         return x_adv

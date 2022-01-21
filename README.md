@@ -26,11 +26,17 @@ python run_attack.py -a PGD -d cifar10 -m resnet110
 
 代码正常执行后，在output文件夹中会产生名如：FGSM-cifar10-resnet20 的文件夹，内部共10000张图片，命名规则为 index-原图标签-攻击后标签
 
-## FGSM
+## FGSM/FGM
 
 > Paper link (Goodfellow et al. 2014): https://arxiv.org/pdf/1412.6572.pdf
 
+FGSM: $L_{\infty}$ norm bound ${||x^{*}-x||}_{\infty}{\leqslant}{\varepsilon}$
+
 $$x_{adv}=x+{\varepsilon}{\cdot}sgn({\triangledown}_xL(x,y;{\theta}))$$
+
+FGM: $L_2$ norm bound ${||x^{*}-x||}_{2}{\leqslant}{\varepsilon}$
+
+$$x_{adv}=x+{\varepsilon}{\cdot}\frac{{\triangledown}_xL(x,y;{\theta})}{{||{\triangledown}_xL(x,y;{\theta})||}_2}$$
 
 ## PGD
 
@@ -52,8 +58,14 @@ $$x_{t+1}^{'}={Clip}_x^{\varepsilon}(x_t^{'}+{\alpha}{\cdot}sgn({\triangledown}_
 
 $$x_0^{'}=x$$
 
-$$g_{t+1}={\miu}{\cdot}g_t+\frac{{\triangledown}_xL(x,y;{\theta}))}{{||{\triangledown}_xL(x,y;{\theta}))||}_1}$$
+$$g_{t+1}={\mu}{\cdot}g_t+\frac{{\triangledown}_xL(x,y;{\theta}))}{{||{\triangledown}_xL(x,y;{\theta}))||}_1}$$
+
+$L_{\infty}$ norm bound ${||x^{*}-x||}_{\infty}{\leqslant}{\varepsilon}$：
 
 $$x_{t+1}^{'}={Clip}_x^{\varepsilon}(x_t^{'}+{\alpha}{\cdot}sgn(g_{t+1})$$
 
-其中，${\miu}$为衰减因子，论文中选取值为1.0，若为0则MI-FGSM等价于PGD方法。
+$L_2$ norm bound ${||x^{*}-x||}_{2}{\leqslant}{\varepsilon}$：
+
+$$x_{t+1}^{'}={Clip}_x^{\varepsilon}(x_t^{'}+{\alpha}{\cdot}\frac{g_{t+1}}{{||g_{t+1}||}_2})$$
+
+其中，${\mu}$为衰减因子，论文中选取值为1.0，若为0则MI-FGSM等价于PGD方法。
