@@ -2,6 +2,10 @@
 
 本项目力图将主流攻击方法基于pytorch框架进行复现，通过本项目的实现从而对对抗攻击方法有一个更为清晰的了解。
 
+限于个人能力与初涉对抗攻击领域，在代码实现过程中难免有（大量）错漏，以及代码丑陋的问题。。。
+
+烦请不吝赐教，欢迎批评指正至：Jiangfan_Liu@163.com or fanfannn98@gmail.com
+
 Inspired by The CleverHans library, https://github.com/cleverhans-lab/cleverhans
 
 > Clever Hans was a horse that appeared to have learned to answer arithmetic questions, but had in fact only learned to read social cues that enabled him to give the correct answer. In controlled settings where he could not see people's faces or receive other feedback, he was unable to answer the same questions. The story of Clever Hans is a metaphor for machine learning systems that may achieve very high accuracy on a test set drawn from the same distribution as the training data, but that do not actually understand the underlying task and perform poorly on other inputs.
