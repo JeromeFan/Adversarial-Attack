@@ -1,4 +1,5 @@
 import torch
+import json
 from baseAlgorithm import BaseAlgorithm
 
 
@@ -7,7 +8,9 @@ class PGD(BaseAlgorithm):
     def __init__(self, model, loss_fn, std):
         super(PGD, self).__init__(model, loss_fn, std)
         print('欢迎使用PGD/BIM/I-FGSM算法模块！')
-        epsilon = int(input('请输入PGD算法所需的epsilon：'))
+        with open('config.json') as config_file:
+            config = json.load(config_file)
+        epsilon = int(config['epsilon'])
         self.epsilon = epsilon / 255 / self.std
         self.num_iter = min(epsilon + 4, int(1.25 * epsilon))
         self.alpha = self.epsilon / self.num_iter

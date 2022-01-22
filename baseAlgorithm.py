@@ -20,6 +20,8 @@ class BaseAlgorithm:
             for i in range(grad.shape[0]):
                 norm_2 = torch.norm(grad[i], p=2)
                 grad[i] = grad[i] / norm_2
+        else:
+            raise Exception("请检查您在config.json中输入的范数值，FGSM为inf，FGM为2！")
 
         x_adv = x_adv + epsilon * grad
         return x_adv

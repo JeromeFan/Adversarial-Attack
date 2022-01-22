@@ -1,0 +1,10 @@
+{
+  "_commentHyperParameter": "===== HYPER PARAMETER =====",
+  "loss_fn": "CrossEntropyLoss",
+  "batch_size": "64",
+
+  "_commentAlgorithm": "===== ALGORITHM =====",
+  "epsilon": "8",
+  "norm_p": "inf",
+  "miu": "1"
+}

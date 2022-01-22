@@ -1,3 +1,4 @@
+import json
 from torchvision import datasets, transforms
 import torch.utils.data
 
@@ -17,7 +18,11 @@ def cifar10():
 
 
 def setupDataset(chosenDataset):
-    batch_size = 64
+
+    with open('config.json') as config_file:
+        config = json.load(config_file)
+    batch_size = int(config['batch_size'])
+
     if chosenDataset == 'cifar10':
         val_data, mean, std = cifar10()
         classes = ('plane', 'car', 'bird', 'cat', 'deer',
