@@ -19,5 +19,5 @@ class PGD(BaseAlgorithm):
         x_adv = data.detach().clone()
         for i in range(self.num_iter):
             x_adv = self.fgsm(x_adv, target, self.alpha, 'inf')
-            x_adv = torch.min(torch.max(x_adv, data - self.epsilon), data + self.epsilon)
+            x_adv = torch.clamp(data + torch.clamp(x_adv - data, -self.epsilon, self.epsilon), 0, 1)
         return x_adv
